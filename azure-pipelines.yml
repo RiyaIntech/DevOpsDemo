@@ -23,4 +23,4 @@ steps:
       solution: '$(solution)'
       platform: '$(buildplatform)'
       configuration: '$(buildConfiguration)'
-    displayName: 'Build solution'
+      displayName: 'Build solution'
