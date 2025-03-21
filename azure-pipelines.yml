@@ -10,17 +10,22 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-  - task: NuGetToolInstaller@1
-    displayName: 'Install NuGet tool'
 
-  - task: NuGetCommand@2
-    inputs:
-      restoreSolution: '$(solution)'
-    displayName: 'Restore NuGet packages'
-
-  - task: VSBuild@1
-    inputs:
-      solution: '$(solution)'
-      platform: '$(buildplatform)'
-      configuration: '$(buildConfiguration)'
-      displayName: 'Build solution'
+- task: UseDotNet@2
+  inputs:
+      packageType: 'sdk'
+      version: '6.x'  
+      installationPath: $(Agent.ToolsDirectory)/dotnet
+      
+- task: DotNetCoreCLI@2
+  inputs:
+      command: 'build'
+      projects: '$(solution)'
+      arguments: '--configuration $(buildConfiguration)'
+  
+- task: DotNetCoreCLI@2
+  inputs:
+      command: 'publish'
+      projects: '$(solution)'
+      publishWebProjects: true
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
